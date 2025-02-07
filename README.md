@@ -1,6 +1,10 @@
 # GCD: Advancing Vision-Language Models for Incremental Object Detection via Global Alignment and Correspondence Distillation
 Official Pytorch implementation for "GCD: Advancing Vision-Language Models for Incremental Object Detection via Global Alignment and Correspondence Distillation", AAAI 2025.
 
+<p align='middle'>
+  <img src='total_framework.png' width='721'/>
+</p>
+
 ## Get Started
 - This repo is based on [MMDetection 3.3](https://github.com/open-mmlab/mmdetection). Please follow the installation of MMDetection [GETTING_STARTED.md](https://mmdetection.readthedocs.io/en/latest/get_started.html) and make sure you can run it successfully.
 ```bash
