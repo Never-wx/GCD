@@ -20,12 +20,12 @@ pip install -v -e .
 
 ## Dataset
 - Unzip COCO dataset into data/coco/
-- run /script/select_categories_2step.py and select_categories_nstep.py to split the COCO dataset
+- Run ./script/select_categories_2step.py and select_categories_nstep.py to split the COCO dataset
 ```python
-# Two-step: 
-python ./script/select_categories_2step.py  # to generate instances_train2017_0-69.json and instances_train2017_70-79.json
-# Multi-step: 
-python ./script/select_categories_nstep.py
+# Two-step(40+40): 
+python ./script/select_categories_2step.py  # to generate instances_train2017_0-39.json and instances_train2017_40-79.json, which is placed in ./data/coco/annotations/40+40
+# Multi-step(40+10*4):
+python ./script/select_categories_nstep.py # divide instances_train2017_40-79.json into 4 steps, , which is placed in ./data/coco/annotations/40+10_4
 ```
 
 ## Train
@@ -36,10 +36,12 @@ python ./script/select_categories_nstep.py
 CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/70+10/gdino_inc_70+10_0-69_scratch_coco.py 4   # train first 70 cats
 CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/70+10/gdino_inc_70+10_70-79_gcd_scratch_coco.py 4 --amp # train last 10 cats incrementally
 
-# Multi-step(40+20*2)
+# Multi-step(40+10*4)
 CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/40+40/gdino_inc_40+40_0-39_scratch_coco.py 4   
-CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/40+20_2/gdino_inc_40+10_4_40-59_gcd_scratch_coco.py 4 --amp
-CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/40+20_2/gdino_inc_40+10_4_60-79_gcd_scratch_coco.py 4 --amp 
+CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/40+10_4/gdino_inc_40+10_4_40-49_gcd_scratch_coco.py 4 --amp
+CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/40+10_4/gdino_inc_40+10_4_50-59_gcd_scratch_coco.py 4 --amp
+CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/40+10_4/gdino_inc_40+10_4_60-69_gcd_scratch_coco.py 4 --amp
+CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_train.sh ./configs/gdino_inc/40+10_4/gdino_inc_40+10_4_70-79_gcd_scratch_coco.py 4 --amp 
 ```
 
 ## Test
