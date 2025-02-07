@@ -3,90 +3,102 @@ import os
 import time
 import json
 
-def sel_cat_train(anno_file, total_phase):
-    print('loading annotations into memory...')
+def sel_cat_train(anno_file, total_phase, output_dir):
+    """Splits training dataset categories into phases and saves them in output directory."""
+    print('Loading annotations into memory...')
     tic = time.time()
-    dataset = json.load(open(anno_file, 'r'))
-    assert type(dataset)==dict, 'annotation file format {} not supported'.format(type(dataset))
-    print('Done (t={:0.2f}s)'.format(time.time()- tic))
 
-    # sort by cat_ids
-    dataset['categories'] = sorted(dataset['categories'], key=lambda k: k['id'])   
+    # Load dataset
+    dataset = json.load(open(anno_file, 'r'))
+    assert isinstance(dataset, dict), 'Annotation file format {} not supported'.format(type(dataset))
+    print('Done (t={:0.2f}s)'.format(time.time() - tic))
+
+    # Create output directory if it does not exist
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Sort categories by ID
+    dataset['categories'] = sorted(dataset['categories'], key=lambda k: k['id'])
     num_cls = len(dataset['categories'])
-    assert num_cls % total_phase == 0
+    
+    assert num_cls % total_phase == 0, "Total categories must be evenly divisible by total phases."
     cls_per_phase = num_cls // total_phase
+
     for phase in range(total_phase):
-        # select cats of cur phase, the cats is fixed
+        # Select categories for the current phase
         start = phase * cls_per_phase
         end = (phase + 1) * cls_per_phase
         sel_cats = dataset['categories'][start:end]
-        print(sel_cats)
-        # selected annotations
+
+        # Select corresponding annotations and images
         sel_cats_ids = [cat['id'] for cat in sel_cats]
-        sel_anno = []
-        sel_image_ids = []
+        sel_anno, sel_image_ids = [], []
         for anno in dataset['annotations']:
             if anno['category_id'] in sel_cats_ids:
                 sel_anno.append(anno)
                 sel_image_ids.append(anno['image_id'])
-        # selected images
-        sel_images = []
-        for image in dataset['images']:
-            if image['id'] in sel_image_ids:
-                sel_images.append(image)
-        # selected dataset
-        sel_dataset = dict()
-        sel_dataset['categories'] = sel_cats
-        sel_dataset['annotations'] = sel_anno
-        sel_dataset['images'] = sel_images
-        # writing results
-        fp = open(os.path.splitext(anno_file)[0] + '_%d-%d.json' % (start, end-1), 'w')
-        json.dump(sel_dataset, fp)
 
-def sel_cat_val(anno_file, total_phase):
-    print('loading annotations into memory...')
+        sel_images = [image for image in dataset['images'] if image['id'] in sel_image_ids]
+
+        # Create the selected dataset
+        sel_dataset = {'categories': sel_cats, 'annotations': sel_anno, 'images': sel_images}
+
+        # Save the split dataset
+        output_path = os.path.join(output_dir, os.path.basename(anno_file).replace('.json', '_{}-{}.json'.format(start, end - 1)))
+        with open(output_path, 'w') as fp:
+            json.dump(sel_dataset, fp)
+        print(f"Saved {output_path}")
+
+def sel_cat_val(anno_file, total_phase, output_dir):
+    """Generates validation dataset splits where each phase accumulates previous categories."""
+    print('Loading annotations into memory...')
     tic = time.time()
-    dataset = json.load(open(anno_file, 'r'))
-    assert type(dataset)==dict, 'annotation file format {} not supported'.format(type(dataset))
-    print('Done (t={:0.2f}s)'.format(time.time()- tic))
 
-    # sort by cat_ids
-    dataset['categories'] = sorted(dataset['categories'], key=lambda k: k['id'])   
+    # Load dataset
+    dataset = json.load(open(anno_file, 'r'))
+    assert isinstance(dataset, dict), 'Annotation file format {} not supported'.format(type(dataset))
+    print('Done (t={:0.2f}s)'.format(time.time() - tic))
+
+    # Create output directory if it does not exist
+    os.makedirs(output_dir, exist_ok=True)
+
+    # Sort categories by ID
+    dataset['categories'] = sorted(dataset['categories'], key=lambda k: k['id'])
     num_cls = len(dataset['categories'])
-    assert num_cls % total_phase == 0
+    
+    assert num_cls % total_phase == 0, "Total categories must be evenly divisible by total phases."
     cls_per_phase = num_cls // total_phase
+
     for phase in range(total_phase):
-        # select cats of cur phase, the cats is fixed
+        # Select categories from phase 0 up to current phase
         start = 0
         end = (phase + 1) * cls_per_phase
         sel_cats = dataset['categories'][start:end]
-        print(sel_cats)
-        # selected annotations
+
+        # Select corresponding annotations and images
         sel_cats_ids = [cat['id'] for cat in sel_cats]
-        sel_anno = []
-        sel_image_ids = []
+        sel_anno, sel_image_ids = [], []
         for anno in dataset['annotations']:
             if anno['category_id'] in sel_cats_ids:
                 sel_anno.append(anno)
                 sel_image_ids.append(anno['image_id'])
-        # selected images
-        sel_images = []
-        for image in dataset['images']:
-            if image['id'] in sel_image_ids:
-                sel_images.append(image)
-        # selected dataset
-        sel_dataset = dict()
-        # sel_dataset['categories'] = sel_cats              # BUG: cur cls, 70-79:[80, 81, 82, 84, 85, 86, 87, 88, 89, 90]
-        sel_dataset['categories'] = dataset['categories']   # BUG: full cls, 0-79
-        sel_dataset['annotations'] = sel_anno
-        sel_dataset['images'] = sel_images
-        # writing results
-        fp = open(os.path.splitext(anno_file)[0] + '_%d-%d.json' % (start, end-1), 'w')
-        json.dump(sel_dataset, fp)
-        
+
+        sel_images = [image for image in dataset['images'] if image['id'] in sel_image_ids]
+
+        # Create the selected dataset
+        sel_dataset = {'categories': dataset['categories'], 'annotations': sel_anno, 'images': sel_images}
+
+        # Save the split dataset
+        output_path = os.path.join(output_dir, os.path.basename(anno_file).replace('.json', '_{}-{}.json'.format(start, end - 1)))
+        with open(output_path, 'w') as fp:
+            json.dump(sel_dataset, fp)
+        print(f"Saved {output_path}")
+
 if __name__ == "__main__":
     total_phase = 4
-    anno_file_train = './data/coco/annotations/instances_train2017.json'
-    sel_cat_train(anno_file_train, total_phase)
-    anno_file_val = './data/coco/annotations/instances_val2017.json'
-    sel_cat_val(anno_file_val, total_phase)
+    output_dir = './data/coco/annotations/40+10_4/'
+
+    anno_file_train = './data/coco/annotations/40+40/instances_train2017_40-79.json'
+    sel_cat_train(anno_file_train, total_phase, output_dir)
+
+    anno_file_val = './data/coco/annotations/40+40/instances_val2017_40-79.json'
+    sel_cat_val(anno_file_val, total_phase, output_dir)
