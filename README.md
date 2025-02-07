@@ -25,7 +25,7 @@ pip install -v -e .
 # Two-step(40+40): 
 python ./script/select_categories_2step.py  # to generate instances_train2017_0-39.json and instances_train2017_40-79.json, which is placed in ./data/coco/annotations/40+40
 # Multi-step(40+10*4) trainset:
-python ./script/select_categories_nstep_train.py # divide instances_train2017_40-79.json into 4 steps [40-49, 50-59, 60-69, 70-79], which is placed in ./data/coco/annotations/40+10_4.
+python ./script/select_categories_nstep_train.py # divide instances_train2017_40-79.json into 4 steps [40-49, 50-59, 60-69, 70-79], which is placed in ./data/coco/annotations/40+10_4
 # Multi-step(40+10*4) valset:
 python ./script/select_categories_nstep_val.py  # divide instances_val2017.json, the valset is [0-49, 0-59, 0-69, 0-79(original file)]
 ```
