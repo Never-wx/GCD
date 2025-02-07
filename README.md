@@ -19,7 +19,7 @@ pip install -v -e .
 ```
 
 ## Dataset
-- Unzip COCO dataset into data/coco/
+- Unzip COCO dataset into ./data/coco/
 - Run ./script/select_categories_2step.py and select_categories_nstep.py to split the COCO dataset
 ```python
 # Two-step(40+40): 
