@@ -6,7 +6,7 @@ Incremental object detection (IOD) is a challenging task that requires detection
 
 ## Approach
 <p align='middle'>
-  <img src='total_framework.png' width='721'/>
+  <img src='framework.png' width='721'/>
 </p>
 
 ## Get Started
