@@ -59,3 +59,18 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 bash ./tools/dist_test.sh ./configs/gdino_inc/70+10
 ## Acknowledgement
 Our code is based on the project [MMDetection](https://github.com/open-mmlab/mmdetection).
 Thanks to the work [ERD](https://github.com/Hi-FT/ERD) and [CL-DETR](https://github.com/yaoyao-liu/CL-DETR).
+
+## Citation
+Please cite our paper if this repo helps your research:
+
+```bibtex
+@inproceedings{wang2025gcd,
+  title={GCD: Advancing Vision-Language Models for Incremental Object Detection via Global Alignment and Correspondence Distillation},
+  author={Wang, Xu and Wang, Zilei and Lin, Zihan},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={39},
+  number={8},
+  pages={8015--8023},
+  year={2025}
+}
+
