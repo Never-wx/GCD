@@ -59,7 +59,7 @@ val_evaluator = dict(ann_file=data_root + 'annotations/40+10_4/instances_val2017
 test_dataloader = val_dataloader
 test_evaluator = val_evaluator
 
-optim_wrapper = dict(optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001))      # first40,lr=0.0001
+optim_wrapper = dict(optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001))     
 
 # learning policy
 max_epochs = 12

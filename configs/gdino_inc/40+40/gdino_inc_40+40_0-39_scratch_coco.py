@@ -19,7 +19,6 @@ train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
         ann_file='annotations/40+40/instances_train2017_0-39.json',
-        label_map_file='annotations/coco2017_label_map.json',   
         start=start,
         end=end))
 
@@ -34,7 +33,7 @@ val_evaluator = dict(ann_file=data_root + 'annotations/40+40/instances_val2017_0
 test_dataloader = val_dataloader
 test_evaluator = val_evaluator
 
-optim_wrapper = dict(optimizer=dict(type='AdamW', lr=0.0001, weight_decay=0.0001))
+optim_wrapper = dict(optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001))
 
 # learning policy
 max_epochs = 12
