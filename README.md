@@ -35,6 +35,9 @@ python ./script/select_categories_nstep_train.py # divide instances_train2017_40
 python ./script/select_categories_nstep_val.py  # divide instances_val2017.json, the valset is [0-49, 0-59, 0-69, 0-79(original file)]
 ```
 
+## Checkpoints
+The base phase weights and dataset splits(40+40, 40+10_4, 70+10) can be obtained from [GoogleDriver](https://drive.google.com/drive/folders/1LqNSDyWEiAQ-Me8amLMWelnS_V8DhoJE?usp=drive_link)
+
 ## Train
 ```python
 # assume that you are under the root directory of this project,
