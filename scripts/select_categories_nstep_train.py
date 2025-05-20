@@ -3,13 +3,13 @@ import os
 import time
 import json
 
-def sel_cat_train(anno_file, total_phase, output_dir):
+def sel_cat_train(anno_file_path, total_phase, output_dir):
     """Splits training dataset categories into phases and saves them in output directory."""
     print('Loading annotations into memory...')
     tic = time.time()
 
     # Load dataset
-    dataset = json.load(open(anno_file, 'r'))
+    dataset = json.load(open(anno_file_path, 'r'))
     assert isinstance(dataset, dict), 'Annotation file format {} not supported'.format(type(dataset))
     print('Done (t={:0.2f}s)'.format(time.time() - tic))
 
@@ -43,16 +43,17 @@ def sel_cat_train(anno_file, total_phase, output_dir):
         sel_dataset = {'categories': sel_cats, 'annotations': sel_anno, 'images': sel_images}
 
         # Save the split dataset
-        prefix = os.path.basename(anno_file).split('_')[-1].split('-')[0]
-        start = int(prefix) + start
-        end = int(prefix) + end
-        output_path = os.path.join(output_dir, os.path.basename(anno_file).replace('.json', '_{}-{}.json'.format(start, end - 1)))
+        anno_file = anno_file_path.split('/')[-1]
+        start = int(os.path.basename(anno_file).split('_')[-1].split('-')[0]) + start
+        end = int(os.path.basename(anno_file).split('_')[-1].split('-')[0]) + end
+
+        output_path = os.path.join(output_dir, 'instances_train2017_' + '{}-{}.json'.format(start, end - 1))
         with open(output_path, 'w') as fp:
             json.dump(sel_dataset, fp)
         print(f"Saved {output_path}")
 
 if __name__ == "__main__":
     total_phase = 4
-    output_dir = './data/coco/annotations/40+10_4/'
+    output_dir = './data/coco/annotations/40+10_4/test'
     anno_file_train = './data/coco/annotations/40+40/instances_train2017_40-79.json'
     sel_cat_train(anno_file_train, total_phase, output_dir)
