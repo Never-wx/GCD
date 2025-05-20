@@ -43,6 +43,9 @@ def sel_cat_train(anno_file, total_phase, output_dir):
         sel_dataset = {'categories': sel_cats, 'annotations': sel_anno, 'images': sel_images}
 
         # Save the split dataset
+        prefix = os.path.basename(anno_file).split('_')[-1].split('-')[0]
+        start = int(prefix) + start
+        end = int(prefix) + end
         output_path = os.path.join(output_dir, os.path.basename(anno_file).replace('.json', '_{}-{}.json'.format(start, end - 1)))
         with open(output_path, 'w') as fp:
             json.dump(sel_dataset, fp)
