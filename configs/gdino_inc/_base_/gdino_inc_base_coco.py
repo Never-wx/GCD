@@ -219,8 +219,8 @@ test_evaluator = val_evaluator
 optim_wrapper = dict(
     _delete_=True,
     type='OptimWrapper',
-    # optimizer=dict(type='AdamW', lr=0.0001, weight_decay=0.0001),
-    optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001),
+    optimizer=dict(type='AdamW', lr=0.0001, weight_decay=0.0001),
+    # optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001),
     clip_grad=dict(max_norm=0.1, norm_type=2),
     paramwise_cfg=dict(
         custom_keys={
