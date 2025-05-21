@@ -31,8 +31,7 @@ def sel_cat_val(anno_file, sel_num, output_dir):
 
     sel_images = [image for image in dataset['images'] if image['id'] in sel_image_ids]
 
-    # Save the first part of the dataset
-    sel_dataset = {'categories': dataset['categories'], 'annotations': sel_anno, 'images': sel_images}  # preserve full categoriy names for validation
+    sel_dataset = {'categories': sel_cats, 'annotations': sel_anno, 'images': sel_images}  
     output_path = os.path.join(output_dir, os.path.basename(anno_file).replace('.json', '_0-{}.json'.format(sel_num - 1)))
     with open(output_path, 'w') as fp:
         json.dump(sel_dataset, fp)
@@ -40,7 +39,7 @@ def sel_cat_val(anno_file, sel_num, output_dir):
 
 if __name__ == "__main__":
     sel_cats = [50, 60, 70]
-    output_dir = './data/coco/annotations/40+10_4/'
+    output_dir = './data/coco/annotations/40+10_4'
     anno_file_val = './data/coco/annotations/instances_val2017.json'
     for cat in sel_cats:
         sel_cat_val(anno_file_val, cat, output_dir)

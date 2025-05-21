@@ -1,10 +1,10 @@
 _base_ = '../_base_/gdino_inc_distn_coco.py'
 
-load_from = './work_dirs/scratch/gdino_inc_40+40_0-39_scratch_coco/epoch_12.pth'
+load_from = './work_dirs/gdino_inc_40+20_2_40-59_gcd_scratch_coco/epoch_12.pth'
 dataset_type = 'CocoIncDataset'
 data_root = './data/coco/'
-start = 40
-end = 60
+start = 60
+end = 80
 
 distn_cfg=dict(
     ori_config_file='configs/gdino_inc/40+40/gdino_inc_40+40_0-39_scratch_coco.py',
@@ -43,24 +43,24 @@ model = dict(
 train_dataloader = dict(
     dataset=dict(
         type=dataset_type,
-        ann_file='annotations/40+20_2/instances_train2017_40-59.json',
+        ann_file='annotations/40+20_2/instances_train2017_60-79.json',
         setting='full_text',     
         start=start,
         end=end))
 
 val_dataloader = dict(
     dataset=dict(
-        ann_file='annotations/40+20_2/instances_val2017_0-59.json',
+        ann_file='annotations/instances_val2017.json',
         setting='full_text',
         start=start,
         end=end)) 
 
-val_evaluator = dict(ann_file=data_root + 'annotations/40+20_2/instances_val2017_0-59.json')
+val_evaluator = dict(ann_file=data_root + 'annotations/instances_val2017.json')
 
 test_dataloader = val_dataloader
 test_evaluator = val_evaluator
 
-optim_wrapper = dict(optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001))      
+optim_wrapper = dict(optimizer=dict(type='AdamW', lr=0.00005, weight_decay=0.0001))     
 
 # learning policy
 max_epochs = 12
@@ -68,4 +68,3 @@ max_epochs = 12
 custom_hooks = [
     dict(type='Increment_distn_hook')
 ]
-

@@ -12,7 +12,7 @@ def sel_cat_train(anno_file_path, total_phase, output_dir):
     dataset = json.load(open(anno_file_path, 'r'))
     assert isinstance(dataset, dict), 'Annotation file format {} not supported'.format(type(dataset))
     print('Done (t={:0.2f}s)'.format(time.time() - tic))
-
+    
     # Create output directory if it does not exist
     os.makedirs(output_dir, exist_ok=True)
 

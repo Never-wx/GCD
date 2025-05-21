@@ -1,6 +1,6 @@
 _base_ = '../_base_/gdino_inc_distn_coco.py'
 
-load_from = './work_dirs/gdino_inc_40+10_4_40-49_ld_adaptive_scratch_coco/epoch_12.pth'
+load_from = './work_dirs/gdino_inc_40+10_4_40-49_gcd_scratch_coco/epoch_12.pth'
 dataset_type = 'CocoIncDataset'
 data_root = './data/coco/'
 start = 50
